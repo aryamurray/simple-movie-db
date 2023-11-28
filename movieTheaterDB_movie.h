@@ -3,6 +3,8 @@
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include "helper.h"
+#include <string.h>
 
 
 typedef struct{
@@ -20,15 +22,60 @@ typedef struct{
 }movieNode;
 
 void insertMovie(movieNode* movieDB){
-    movie* newMovie = (movie*) malloc(sizeof(movie));
+  // Malloc newMovie since we need this on heap
+    movie *newMovie = (movie *)malloc(sizeof(movie));
 
+    // Scanning Movie ID
+    printf("Enter movie code:");
+    scanf(" %d", &(newMovie->id));
+    getchar();
 
-    printf("YOU'VE SELECTED TO CREATE A NEW MOVIE\n\n");
-    printf("Please Enter a Movie Code: ");
-    scanf("%d", newMovie->)
+    // Error checking
+    if (newMovie->id > 100 || newMovie->id < 0 || checkMovieDB(movieDB, newMovie->id) == true)
+    {
+        printf("Error: That Code is invalid.");
+        free(newMovie);
+        return;
+    }
+
+    // Checks if new value ends in \n which means the full value fit within the limit (99). Otherwise, flush buffer
+    printf("Enter movie name: ");
+    if (fgets(newMovie->name, 99, stdin) != NULL)
+    {
+        if (strchr(newMovie->name, '\n') == NULL)
+        {
+            // fgets read the maximum number of characters
+            flushBuffer();
+        }
+    }
+    // Checks if new value ends in \n which means the full value fit within the limit (24). Otherwise, flush buffer
+    printf("Enter movie genre: ");
+    if (fgets(newMovie->genre, 24, stdin) != NULL)
+    {
+        if (strchr(newMovie->genre, '\n') == NULL)
+        {
+            // fgets read the maximum number of characters
+            flushBuffer();
+        }
+    }
+
+    printf("Enter movie rating: ");
+    scanf(" %f", &(newMovie->rating));
+    getchar();
+
+    // Error Checking
+    if (newMovie->rating > 10.0 || newMovie->rating < 0.0)
+    {
+        printf("Error: Your rating is out of bounds.");
+        free(newMovie);
+        return NULL;
+    }
+
+    return newMovie;
 }
 
-bool checkMovie(movieNode* movieDB, int id){
+//Checks for Movie based on ID in the Database
+bool checkMovieDB(movieNode* movieDB, int id){
     movieNode* node = movieDB;
 
     while (node != NULL){
