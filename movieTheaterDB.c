@@ -50,7 +50,7 @@ int main(void){
                         getchar();
 
                         if (checkMovieDB(movieDB, id) != NULL){
-
+                            updateMovie(movieDB, id);
                         }   
                         else{
                             printf("Error: That Id was not found.\n");
@@ -70,6 +70,14 @@ int main(void){
                         else{
                             printf("Error: That Code was not located.");
                         }
+                        break;
+                    case 'd':
+                        printf("Dumping MovieDB...\n");
+                        dumpMovieDB(movieDB);
+                        break;
+                    case 'r':
+                        printf("Restoring MovieDB...\n");
+                        movieDB = restoreMovieDB();
                         break;
                 }
                 break;
@@ -94,21 +102,50 @@ int main(void){
                         }
                         break;
                     case 'u':
+                        printf("Enter a Actor Code to update: ");
+                        scanf(" %d", &id);
+                        getchar();
+
+                        if (checkActorDB(actorDB, id) != NULL){
+                            updateActor(actorDB, id);
+                        }   
+                        else{
+                            printf("Error: That Id was not found.\n");
+                        }
                         break;
                     case 'p':
+                        printActors(actorDB);
                         break;
                     case 'e':
+                        printf("Enter an Actor Code to Erase: ");
+                        scanf(" %d", &id);
+                        getchar();
+                        if (checkActorDB(actorDB, id) != NULL){
+                            deleteActor(&actorDB, id);
+                            printf("Deleted Actor with ID: %d\n", id);
+                        }
+                        else{
+                            printf("Error: That Code was not located.");
+                        }
                         break;
+                    case 'd':
+                        printf("Dumping ActorDB...\n");
+                        dumpActorDB(actorDB);
+                        break;
+                    case 'r':
+                        printf("Restoring ActorDB...\n");
+                        actorDB = restoreActorDB();
+                        break;
+
 
                 }
                 break;
             case 'q':
                 cleanDatabase(movieDB);
+                cleanActorDatabase(actorDB);
                 running = false;
                 break;
         }
     }
-
-
     return 0;
 }

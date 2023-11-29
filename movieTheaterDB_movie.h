@@ -76,3 +76,7 @@ void eraseMovie(movieNode* movieDB, int id);
 void printMovies(movieNode* movieDB);
 
 void updateMovie(movieNode* movieDB, int id);
+
+void dumpMovieDB(movieNode* movieDB);
+
+movieNode* restoreMovieDB();

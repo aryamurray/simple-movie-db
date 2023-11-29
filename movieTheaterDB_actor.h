@@ -2,6 +2,7 @@
 
 #include "helper.h"
 #include "fort.h"
+#include <string.h>
 
 typedef struct{
     int id;
@@ -22,12 +23,16 @@ actor* checkActorDB(actorNode* actorDB, int id);
 
 int deleteActor(actorNode **actorDB, int id);
 
+void updateActor(actorNode* actorDB, int id);
+
 int cleanActorDatabase(actorNode* actorDB);
 
 void appendActorToDB(actorNode* actorDB, actor* actor);
 
 void printActor(actor* actor);
 
-void eraseActor(actorNode* actorDB, int id);
-
 void printActors(actorNode* actorDB);
+
+void dumpActorDB(actorNode* actorDB);
+
+actorNode* restoreActorDB();

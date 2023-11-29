@@ -87,11 +87,18 @@ int deleteMovie(movieNode **movieDB, int id)
 
     // Special case: deleting the first node
     if (node->data->id == id)
-    {
-        *movieDB = node->next;
-        free(node->data);
-        free(node);
-        return 0;
+    {   
+        if (node->next != NULL){
+            *movieDB = node->next;
+            free(node->data);
+            return 0;
+        }
+        else{
+            free(node->data);
+            node->data = NULL;
+            return 0;
+        }
+
     }
 
     // Search for the node with the given id
@@ -249,4 +256,53 @@ void updateMovie(movieNode *movieDB, int id)
         return;
     }
     appendMovieToDB(movieDB, newMovie);
+}
+
+void dumpMovieDB(movieNode* movieDB) {
+    FILE* file = fopen("movieDB.bin", "wb");
+    if (file == NULL) {
+        printf("Error opening file!\n");
+        return;
+    }
+
+    movieNode* node = movieDB;
+    while (node != NULL) {
+        fwrite(node->data, sizeof(movie), 1, file);
+        node = node->next;
+    }
+
+    fclose(file);
+}
+
+movieNode* restoreMovieDB() {
+    FILE* file = fopen("movieDB.bin", "rb");
+    if (file == NULL) {
+        printf("Error opening file!\n");
+        return NULL;
+    }
+
+    movieNode* movieDB = NULL;
+    movieNode* lastNode = NULL;
+
+    while (!feof(file)) {
+        movie* m = malloc(sizeof(movie));
+        if (fread(m, sizeof(movie), 1, file) != 1) {
+            free(m);
+            break;
+        }
+
+        movieNode* node = malloc(sizeof(movieNode));
+        node->data = m;
+        node->next = NULL;
+
+        if (movieDB == NULL) {
+            movieDB = node;
+        } else {
+            lastNode->next = node;
+        }
+        lastNode = node;
+    }
+
+    fclose(file);
+    return movieDB;
 }

@@ -1,6 +1,3 @@
 #pragma once
 #include "movieTheaterDB_movie.h"
-
-
-void controlActors();
-void controlMovies();
+#include "movieTheaterDB_actor.h"
