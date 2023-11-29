@@ -38,7 +38,7 @@ void insertMovie(movieNode *movieDB);
  * @return
  *  Returns Movie if it exists, otherwise Null.
  */
-movie* checkMovieDB(movieNode *movieDB, int id);
+movie *checkMovieDB(movieNode *movieDB, int id);
 /**
  * @param movieDB
  *  A pointer reference to the Movie Database.
@@ -46,17 +46,16 @@ movie* checkMovieDB(movieNode *movieDB, int id);
  *  The movie id used to check the DB with.
  * @return
  *  Returns Integer Status Code.
- *
  */
 int deleteMovie(movieNode **movieDB, int id);
 
 /**
  * @param movieDB
  *  A pointer reference to the Movie Database.
- * 
+ *
  * @note
  *  Frees all memory from the DB.
-*/
+ */
 int cleanDatabase(movieNode *movieDB);
 
 /**
@@ -65,18 +64,58 @@ int cleanDatabase(movieNode *movieDB);
  * @note
  *  This is different from insertMovie as it ONLY adds movie to DB, whereas insertMovie grabs details for creating the initial movie struct
  * @param movie
- *  New Movie struct to be added to the Database. 
-*/
+ *  New Movie struct to be added to the Database.
+ */
 void appendMovieToDB(movieNode *movieDB, movie *movie);
-
+/**
+ * @param movi
+ *  A pointer Reference to a single movie
+ *
+ * @note
+ *  Prints out a single movie in a neatly formatted table.
+ */
 void printMovie(movie *movie);
-
-void eraseMovie(movieNode* movieDB, int id);
-
-void printMovies(movieNode* movieDB);
-
-void updateMovie(movieNode* movieDB, int id);
-
-void dumpMovieDB(movieNode* movieDB);
-
-movieNode* restoreMovieDB();
+/**
+ * @param movieDB
+ *  A pointer Reference to the Movie Database
+ *
+ * @param id
+ *  id represents the corresponding movie id to delete
+ *
+ * @note
+ *  Deletes a single movie from the database
+ */
+void eraseMovie(movieNode *movieDB, int id);
+/**
+ * @param movieDB
+ *  A pointer Reference to the Movie Database
+ *
+ * @note
+ *  Prints out the entire database of movies in a neatly formatted table.
+ */
+void printMovies(movieNode *movieDB);
+/**
+ * @param movieDB
+ *  A pointer Reference to the Movie Database
+ *
+ * @param id
+ *  id represents the corresponding movie id to update
+ *
+ * @note
+ *  This function updates an existing movie entry in the database.
+ */
+void updateMovie(movieNode *movieDB, int id);
+/**
+ * @param moveieDB
+ *  A pointer Reference to the Movie Database
+ *
+ * @note
+ *  Dumps entire Movie Database to "movieDB.bin"
+ *
+ */
+void dumpMovieDB(movieNode *movieDB);
+/**
+ * @note
+ *  Restores entire Movie Database from "movieDB.bin"
+ */
+movieNode *restoreMovieDB();
