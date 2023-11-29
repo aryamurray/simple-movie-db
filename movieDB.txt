@@ -1,6 +1,0 @@
-ID: 1, Name: shrel
-, Genre: h
-, Rating: 5.00
-ID: 2, Name: shrek 2
-, Genre: h
-, Rating: 5.60
