@@ -1,4 +1,5 @@
 #include "helper.h"
+
 void flushBuffer()
 {
     int c;

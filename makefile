@@ -2,7 +2,7 @@
 CC = gcc
 
 # Compiler Flags
-CFLAGS = -Wall -Wextra -std=c99 -g
+CFLAGS = -Wextra -std=c99 -g
 
 # Header Files
 DEPS = movieTheaterDB.h movieTheaterDB_movie.h movieTheaterDB_actor.h fort.h helper.h

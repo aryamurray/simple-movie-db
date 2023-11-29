@@ -1,5 +1,5 @@
 #pragma once
-#include "movieTheaterDB_actor.h"
+
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -13,7 +13,6 @@ typedef struct
     char name[100];
     char genre[25];
     float rating;
-    actor actor;
 } movie;
 
 typedef struct
@@ -75,3 +74,5 @@ void printMovie(movie *movie);
 void eraseMovie(movieNode* movieDB, int id);
 
 void printMovies(movieNode* movieDB);
+
+void updateMovie(movieNode* movieDB, int id);

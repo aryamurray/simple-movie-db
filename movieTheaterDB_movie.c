@@ -54,38 +54,40 @@ void insertMovie(movieNode *movieDB)
 }
 
 // Checks for Movie based on ID in the Database
-movie* checkMovieDB(movieNode *movieDB, int id)
+movie *checkMovieDB(movieNode *movieDB, int id)
 {
     movieNode *node = movieDB;
 
-    if (movieDB->data == NULL){
-        return false;
+    if (movieDB->data == NULL)
+    {
+        return NULL;
     }
-
 
     while (node != NULL)
     {
         if (node->data->id == id)
         {
-           return node->data;
+            return node->data;
         }
-        node = node->next;  // Move to the next node
+        node = node->next; // Move to the next node
     }
     return NULL;
 }
 
-
-int deleteMovie(movieNode** movieDB, int id) {
-    movieNode* prev = NULL;
-    movieNode* node = *movieDB;
+int deleteMovie(movieNode **movieDB, int id)
+{
+    movieNode *prev = NULL;
+    movieNode *node = *movieDB;
 
     // Check if the list is empty
-    if (node == NULL) {
+    if (node == NULL)
+    {
         return -1;
     }
 
     // Special case: deleting the first node
-    if (node->data->id == id) {
+    if (node->data->id == id)
+    {
         *movieDB = node->next;
         free(node->data);
         free(node);
@@ -93,13 +95,15 @@ int deleteMovie(movieNode** movieDB, int id) {
     }
 
     // Search for the node with the given id
-    while (node != NULL && node->data->id != id) {
+    while (node != NULL && node->data->id != id)
+    {
         prev = node;
         node = node->next;
     }
 
     // If the node is not found
-    if (node == NULL) {
+    if (node == NULL)
+    {
         return -1;
     }
 
@@ -110,7 +114,6 @@ int deleteMovie(movieNode** movieDB, int id) {
 
     return 0;
 }
-
 
 // Should Work
 int cleanDatabase(movieNode *movieDB)
@@ -132,7 +135,8 @@ void appendMovieToDB(movieNode *movieDB, movie *movie)
 {
     movieNode *newMovieNode = (movieNode *)malloc(sizeof(movieNode));
     movieNode *node = movieDB;
-    if (movieDB->data == NULL){
+    if (movieDB->data == NULL)
+    {
         movieDB->data = movie;
         free(newMovieNode);
         return;
@@ -172,10 +176,10 @@ void printMovie(movie *movie)
     ft_destroy_table(table);
 }
 
-
-void printMovies(movieNode* movieDB)
-{   
-    if (movieDB->data == NULL){
+void printMovies(movieNode *movieDB)
+{
+    if (movieDB->data == NULL)
+    {
         printf("Error: There are no Movies to print.");
         return;
     }
@@ -183,13 +187,14 @@ void printMovies(movieNode* movieDB)
     // the values
     char stringid[4];
     char stringRating[4];
-    movieNode* node = movieDB;
+    movieNode *node = movieDB;
 
     ft_table_t *table = ft_create_table();
     ft_set_cell_prop(table, 0, FT_ANY_COLUMN, FT_CPROP_ROW_TYPE, FT_ROW_HEADER);
     ft_write_ln(table, "Movie Code", "Movie name", "Movie Genre", "Movie Rating");
 
-    while (node != NULL){
+    while (node != NULL)
+    {
 
         sprintf(stringid, " %d", node->data->id);
         sprintf(stringRating, "%.1f", node->data->rating);
@@ -197,8 +202,51 @@ void printMovies(movieNode* movieDB)
 
         node = node->next;
     }
-    
+
     printf("%s\n", ft_to_string(table));
     ft_destroy_table(table);
     return;
+}
+
+void updateMovie(movieNode *movieDB, int id)
+{   
+    deleteMovie(&movieDB, id);
+    // Malloc newMovie since we need this on heap
+    movie *newMovie = (movie *)malloc(sizeof(movie));
+
+    newMovie->id = id;
+
+    // Checks if new value ends in \n which means the full value fit within the limit (99). Otherwise, flush buffer
+    printf("Enter movie name: ");
+    if (fgets(newMovie->name, 99, stdin) != NULL)
+    {
+        if (strchr(newMovie->name, '\n') == NULL)
+        {
+            // fgets read the maximum number of characters
+            flushBuffer();
+        }
+    }
+    // Checks if new value ends in \n which means the full value fit within the limit (24). Otherwise, flush buffer
+    printf("Enter movie genre: ");
+    if (fgets(newMovie->genre, 24, stdin) != NULL)
+    {
+        if (strchr(newMovie->genre, '\n') == NULL)
+        {
+            // fgets read the maximum number of characters
+            flushBuffer();
+        }
+    }
+
+    printf("Enter movie rating: ");
+    scanf(" %f", &(newMovie->rating));
+    getchar();
+
+    // Error Checking
+    if (newMovie->rating > 10.0 || newMovie->rating < 0.0)
+    {
+        printf("Error: Your rating is out of bounds.");
+        free(newMovie);
+        return;
+    }
+    appendMovieToDB(movieDB, newMovie);
 }
