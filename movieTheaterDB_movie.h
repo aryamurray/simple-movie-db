@@ -49,7 +49,7 @@ movie* checkMovieDB(movieNode *movieDB, int id);
  *  Returns Integer Status Code.
  *
  */
-int deleteMovie(movieNode *movieDB, int id);
+int deleteMovie(movieNode **movieDB, int id);
 
 /**
  * @param movieDB
@@ -73,3 +73,5 @@ void appendMovieToDB(movieNode *movieDB, movie *movie);
 void printMovie(movie *movie);
 
 void eraseMovie(movieNode* movieDB, int id);
+
+void printMovies(movieNode* movieDB);

@@ -11,7 +11,7 @@ void insertMovie(movieNode *movieDB)
     getchar();
 
     // Error checking
-    if (newMovie->id < 0 || checkMovieDB(movieDB, newMovie->id) == true)
+    if (newMovie->id < 0 || checkMovieDB(movieDB, newMovie->id) != NULL)
     {
         printf("Error: That Code is invalid.");
         free(newMovie);
@@ -75,29 +75,36 @@ movie* checkMovieDB(movieNode *movieDB, int id)
 }
 
 
-int deleteMovie(movieNode* movieDB, int id){
-    movieNode* past = NULL;
-    movieNode* node = movieDB;
-    if (node->next == NULL){
-        free(movieDB->data);
-        movieDB->data = NULL;
-        return 0;
+int deleteMovie(movieNode** movieDB, int id) {
+    movieNode* prev = NULL;
+    movieNode* node = *movieDB;
+
+    // Check if the list is empty
+    if (node == NULL) {
+        return -1;
     }
-    if (node != NULL && node->data->id == id){
-        movieDB = node->next;
+
+    // Special case: deleting the first node
+    if (node->data->id == id) {
+        *movieDB = node->next;
         free(node->data);
         free(node);
         return 0;
     }
 
-    while (node != NULL && node->data->id != id){
-        past = node;
+    // Search for the node with the given id
+    while (node != NULL && node->data->id != id) {
+        prev = node;
         node = node->next;
     }
 
-    if (node == NULL) return -1;
+    // If the node is not found
+    if (node == NULL) {
+        return -1;
+    }
 
-    past->next = node->next;
+    // Delete the node
+    prev->next = node->next;
     free(node->data);
     free(node);
 
@@ -163,4 +170,35 @@ void printMovie(movie *movie)
 
     // Cleanup
     ft_destroy_table(table);
+}
+
+
+void printMovies(movieNode* movieDB)
+{   
+    if (movieDB->data == NULL){
+        printf("Error: There are no Movies to print.");
+        return;
+    }
+    // Reference printMovie() for functionality comments. This is mirror with a simple for loop to iterate through all
+    // the values
+    char stringid[4];
+    char stringRating[4];
+    movieNode* node = movieDB;
+
+    ft_table_t *table = ft_create_table();
+    ft_set_cell_prop(table, 0, FT_ANY_COLUMN, FT_CPROP_ROW_TYPE, FT_ROW_HEADER);
+    ft_write_ln(table, "Movie Code", "Movie name", "Movie Genre", "Movie Rating");
+
+    while (node != NULL){
+
+        sprintf(stringid, " %d", node->data->id);
+        sprintf(stringRating, "%.1f", node->data->rating);
+        ft_write_ln(table, stringid, node->data->name, node->data->genre, stringRating);
+
+        node = node->next;
+    }
+    
+    printf("%s\n", ft_to_string(table));
+    ft_destroy_table(table);
+    return;
 }

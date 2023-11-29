@@ -42,12 +42,14 @@ int main(void){
                         break;
                     case 'u':
                     case 'p':
+                        printMovies(movieDB);
+                        break;
                     case 'e':
                         printf("Enter a Movie Code to Erase: ");
                         scanf(" %d", &id);
                         getchar();
                         if (checkMovieDB(movieDB, id) != NULL){
-                            deleteMovie(movieDB, id);
+                            deleteMovie(&movieDB, id);
                             printf("Deleted Movie with ID: %d\n", id);
                         }
                         else{
