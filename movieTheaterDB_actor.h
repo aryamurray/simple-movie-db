@@ -1,3 +1,5 @@
+#pragma once
+
 typedef struct{
     int id;
     char name[50];
@@ -7,5 +9,5 @@ typedef struct{
 
 typedef struct{
     actor* actor;
-    actorNode next;
+    struct actorNode* next;
 }actorNode;

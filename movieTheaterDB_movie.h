@@ -5,123 +5,71 @@
 #include <stdlib.h>
 #include "helper.h"
 #include <string.h>
+#include "fort.h"
 
-
-typedef struct{
+typedef struct
+{
     int id;
     char name[100];
     char genre[25];
     float rating;
     actor actor;
-}movie;
+} movie;
 
+typedef struct
+{
+    movie *data;
+    struct movieNode *next;
+} movieNode;
 
-typedef struct{
-    movie* data;
-    movieNode* next;
-}movieNode;
+/**
+ * @param movieDB
+ *  A pointer reference to the Movie Dataabase
+ * @note
+ *  Used for initially adding a movie into a movieDB. Asks series of questions to fill out information.
+ * @return
+ *  Returns nothing. All Errors are handled within the Function itself
+ */
+void insertMovie(movieNode *movieDB);
+/**
+ * @param movieDB
+ *  A pointer reference to the Movie Database.
+ * @param id
+ *  The movie id used to check the DB with.
+ * @return
+ *  Returns Movie if it exists, otherwise Null.
+ */
+movie* checkMovieDB(movieNode *movieDB, int id);
+/**
+ * @param movieDB
+ *  A pointer reference to the Movie Database.
+ * @param id
+ *  The movie id used to check the DB with.
+ * @return
+ *  Returns Integer Status Code.
+ *
+ */
+int deleteMovie(movieNode *movieDB, int id);
 
-void insertMovie(movieNode* movieDB){
-  // Malloc newMovie since we need this on heap
-    movie *newMovie = (movie *)malloc(sizeof(movie));
+/**
+ * @param movieDB
+ *  A pointer reference to the Movie Database.
+ * 
+ * @note
+ *  Frees all memory from the DB.
+*/
+int cleanDatabase(movieNode *movieDB);
 
-    // Scanning Movie ID
-    printf("Enter movie code:");
-    scanf(" %d", &(newMovie->id));
-    getchar();
+/**
+ * @param movieDB
+ *  A pointer reference to the Movie Database.
+ * @note
+ *  This is different from insertMovie as it ONLY adds movie to DB, whereas insertMovie grabs details for creating the initial movie struct
+ * @param movie
+ *  New Movie struct to be added to the Database. 
+*/
+void appendMovieToDB(movieNode *movieDB, movie *movie);
 
-    // Error checking
-    if (newMovie->id > 100 || newMovie->id < 0 || checkMovieDB(movieDB, newMovie->id) == true)
-    {
-        printf("Error: That Code is invalid.");
-        free(newMovie);
-        return;
-    }
+void printMovie(movie *movie);
 
-    // Checks if new value ends in \n which means the full value fit within the limit (99). Otherwise, flush buffer
-    printf("Enter movie name: ");
-    if (fgets(newMovie->name, 99, stdin) != NULL)
-    {
-        if (strchr(newMovie->name, '\n') == NULL)
-        {
-            // fgets read the maximum number of characters
-            flushBuffer();
-        }
-    }
-    // Checks if new value ends in \n which means the full value fit within the limit (24). Otherwise, flush buffer
-    printf("Enter movie genre: ");
-    if (fgets(newMovie->genre, 24, stdin) != NULL)
-    {
-        if (strchr(newMovie->genre, '\n') == NULL)
-        {
-            // fgets read the maximum number of characters
-            flushBuffer();
-        }
-    }
-
-    printf("Enter movie rating: ");
-    scanf(" %f", &(newMovie->rating));
-    getchar();
-
-    // Error Checking
-    if (newMovie->rating > 10.0 || newMovie->rating < 0.0)
-    {
-        printf("Error: Your rating is out of bounds.");
-        free(newMovie);
-        return NULL;
-    }
-
-    return newMovie;
-}
-
-//Checks for Movie based on ID in the Database
-bool checkMovieDB(movieNode* movieDB, int id){
-    movieNode* node = movieDB;
-
-    while (node != NULL){
-        if (node->data->id == id){
-            return true;
-        }
-    }
-    return false;
-}
-
-int deleteMovie(movieNode* movieDB, int id){
-    movieNode* past = NULL;
-    movieNode* node = movieDB;
-
-    while (node != NULL){
-        if (node->data->id == id){
-            past->next = node->next;
-            return 0;
-        }
-        past = node;
-        node = past->next;
-    }
-    return -1;
-};
-
-
-int cleanDatabase(movieNode* movieDB){
-    movieNode* node = movieDB;
-    movieNode* prev;
-    while (node != NULL){
-        free(node->data);
-        prev = node;
-        node = node->next;
-        free(prev);
-    }
-    free(node->data);
-    free(node);
-    return 0;
-};
-
-void appendMovieToDB(movieNode* movieDB, movie* movie){
-    movieNode* newMovie = (movieNode*) malloc(sizeof(movieNode));
-    movieNode* node = movieDB;
-    while (node != NULL){
-        node = node->next;
-    }
-    newMovie->data = movie;
-    return;
-}
+void eraseMovie(movieNode* movieDB, int id);

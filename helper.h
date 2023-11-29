@@ -1,8 +1,4 @@
+#pragma once
 #include <stdio.h>
 
-void flushBuffer()
-{
-    int c;
-    while ((c = getchar()) != '\n' && c != EOF)
-        ;
-}
+void flushBuffer();
